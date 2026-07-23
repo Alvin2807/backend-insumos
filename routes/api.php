@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Colores\ColoresController;
 use App\Http\Controllers\Nomenclaturas\NomenclaturaController;
+use App\Http\Controllers\Despacho\DespachosController;
+use App\Http\Controllers\Articulos\ArticuloController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +20,10 @@ use App\Http\Controllers\Nomenclaturas\NomenclaturaController;
 */
 //Route::post('cerrar_secion', [App\Http\Controllers\Login\UsersController::class, 'cerrar_secion']);
 Route::post('iniciar_secion', [App\Http\Controllers\Login\UsersController::class, 'iniciar_secion']);
+Route::get('despachos_panama', [App\Http\Controllers\Despacho\DespachosController::class,'despachosPanama']);
 
+Route::apiResource('articulos', ArticuloController::class);
+Route::apiResource('despachos', DespachosController::class);
 Route::apiResource('nomenclaturas', NomenclaturaController::class);
 Route::apiResource('colores', ColoresController::class);
 Route::apiResource('tipos_impresoras', TipoImpresoraController::class);
