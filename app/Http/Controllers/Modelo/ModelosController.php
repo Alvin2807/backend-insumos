@@ -49,28 +49,29 @@ class ModelosController extends Controller
               if (count($consulta) > 0) {
                return response()->json([
                   'ok' => true,
-                  'message' => 'Ya existe un modelo con el mismo nombre',
+                  'existeModelo' => 'Ya existe un modelo con el mismo nombre',
                ]);
               } else {
                 $modelo = new Modelo();
-                $modelo->fk_marca = $request->input('fk_marca');
+                $modelo->fk_marca = $request->input('id_marca');
                 $modelo->modelo = $nombre_modelo;
+                $modelo->usuario_crea = $request->input('usuario');
                 $modelo->save();
                 DB::commit();
                 return response()->json([
                   'ok' => true,
-                  'message' => 'Registro existoso',
+                  'exitoso' => 'Registro existoso',
                   'data' => $modelo
                 ]);
               }
-             
-              
+
+
         } catch (\Exception $th) {
            DB::rollBack();
            return response()->json([
                 'ok' => false,
                 'data' => $th->getMessage(),
-                'message' => 'Error al registrar el modelo',
+                'errorRegistro' => 'Error al registrar el modelo',
            ]);
         }
     }

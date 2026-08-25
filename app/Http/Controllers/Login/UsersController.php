@@ -7,9 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Login\RegistrarRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\Login\LoginRequest;
-
+use App\Models\VistaUsuarios;
 class UsersController extends Controller
 {
     /**
@@ -17,7 +18,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -57,24 +58,38 @@ class UsersController extends Controller
      */
     public function iniciar_secion(LoginRequest $request)
     {
-        $data = $request->validated();
+        try {
+            DB::beginTransaction();
+            $data = $request->validated();
 
-        $user = User::where('usuario', $data['usuario'])->first();
+            $user = User::where('usuario', $data['usuario'])->first();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+            if (!$user || !Hash::check($data['password'], $user->password)) {
+                return response()->json([
+                    'ok'=>true,
+                    'mensajeIncorrecto' => 'Usuario o contraseña incorrectos!'
+                ]);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            $cookie = cookie('token', $token, 60 * 24); // 1 day
+
+            DB::commit();
+
             return response()->json([
-                'message' => 'Usuario o contraseña incorrectos!'
-            ], 401);
+                "ok"=>true,
+                "data"=>$user
+            ])->withCookie($cookie);
+
+
+        } catch (\Exception $th) {
+           return response()->json([
+            "ok"=>false,
+            "data"=>$th->getMessage(),
+            "error"=>'Hubo un error consulte con el Administrador del Sistema'
+           ]);
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        $cookie = cookie('token', $token, 60 * 24); // 1 day
-
-        return response()->json([
-            "ok"=>true,
-            "data"=>$user
-        ])->withCookie($cookie);
     }
 
     /**

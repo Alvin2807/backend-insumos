@@ -22,7 +22,7 @@ class RegistrarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fk_marca' =>'required|integer',
+            'id_marca' =>'required|integer',
             'modelo'=>'required|string'
         ];
     }
