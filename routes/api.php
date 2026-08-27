@@ -8,6 +8,7 @@ use App\Http\Controllers\Colores\ColoresController;
 use App\Http\Controllers\Nomenclaturas\NomenclaturaController;
 use App\Http\Controllers\Despacho\DespachosController;
 use App\Http\Controllers\Articulos\ArticuloController;
+use App\Http\Controllers\Marcas\MarcasController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,6 +22,8 @@ use App\Http\Controllers\Articulos\ArticuloController;
 //Route::post('cerrar_secion', [App\Http\Controllers\Login\UsersController::class, 'cerrar_secion']);
 Route::post('iniciar_secion', [App\Http\Controllers\Login\UsersController::class, 'iniciar_secion']);
 Route::get('despachos_panama', [App\Http\Controllers\Despacho\DespachosController::class,'despachosPanama']);
+
+Route::post('editar_marca', [App\Http\Controllers\Marcas\MarcasController::class,'editar']);
 
 Route::apiResource('articulos', ArticuloController::class);
 Route::apiResource('despachos', DespachosController::class);
